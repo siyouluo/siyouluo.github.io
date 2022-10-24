@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Luo Siyou</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Luo Siyou"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Luo Siyou"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Luo Siyou"><meta property="og:url" content="https://luosiyou.cn/"><meta property="og:site_name" content="Luo Siyou"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://luosiyou.cn/img/og_image.png"><meta property="article:author" content="Luo Siyou"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://luosiyou.cn/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://luosiyou.cn"},"headline":"Luo Siyou","image":["https://luosiyou.cn/img/og_image.png"],"author":{"@type":"Person","name":"Luo Siyou"},"publisher":{"@type":"Organization","name":"Luo Siyou","logo":{"@type":"ImageObject","url":"https://luosiyou.cn/img/logo.svg"}},"description":""}</script><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Luo Siyou" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/siyouluo/siyouluo.github.io"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2022-10-24T08:47:21.282Z" title="2022/10/24 16:47:21">2022-10-24</time></span><span class="level-item">Updated&nbsp;<time dateTime="2022-10-24T12:32:45.650Z" title="2022/10/24 20:32:45">2022-10-24</time></span><span class="level-item">9 minutes read (About 1398 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/hello-world/">搭建博客</a></h1><div class="content"><p>基于 <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 搭建静态博客网站，使用 <a target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-icarus">ICARUS</a> 主题，并部署在 <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> 上。</p>
+<h1 id="在-Github-创建网站"><a href="#在-Github-创建网站" class="headerlink" title="在 Github 创建网站"></a>在 Github 创建网站</h1><p>参考 <a target="_blank" rel="noopener" href="https://docs.github.com/cn/pages/quickstart">GitHub Pages 快速入门</a></p>
+<p>在 Github 创建一个带有自己用户名的仓库 <code>username.github.io</code>, 例如 <code>siyouluo.github.io</code>.<br>然后在该仓库下新建一个 <code>index.html</code> 文件</p>
+<figure class="highlight html"><figcaption><span>index.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hello world</span><br></pre></td></tr></table></figure>
+<p>稍等片刻, 即可访问 <a target="_blank" rel="noopener" href="https://siyouluo.github.io/">https://siyouluo.github.io</a> 打开网站。</p>
+<p>具体的网址可以在仓库的 <code>Settings -&gt; Pages -&gt; GitHub Pages</code> 页面看到: <code>Your site is live at &lt;some url&gt;</code>.</p>
+<h2 id="自定义域名-可选"><a href="#自定义域名-可选" class="headerlink" title="自定义域名 (可选)"></a>自定义域名 (可选)</h2><p>GitHub Pages 提供的域名是用户名后跟着 <code>.github.io</code>, 如果自己有域名, 可以使用自己的域名来访问该网站.</p>
+<ol>
+<li><p>登录自己的域名管理页面 (例如腾讯云域名解析 <a target="_blank" rel="noopener" href="https://console.dnspod.cn/dns/">https://console.dnspod.cn/dns/</a>), 添加两条记录, 其中 <code>@</code> 主机的记录值是通过 <code>ping siyouluo.github.io</code> 显示出来的 ip 地址. </p>
+<table>
+<thead>
+<tr>
+<th>主机记录</th>
+<th>记录类型</th>
+<th>记录值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@</td>
+<td>A</td>
+<td>185.199.111.153</td>
+</tr>
+<tr>
+<td>www</td>
+<td>CNAME</td>
+<td>siyouluo.github.io</td>
+</tr>
+</tbody></table>
+<p><strong>补充</strong><br>实际上, 通过 ping 得到的 ip 地址总是在如下四个地址之间变动, 在进行域名解析时可以添加四条 <code>A</code> 记录, 分别指向四个 ip.<br>实测中, 至少需要有一条 <code>A</code> 记录指向如下之一的 ip 地址即可.</p>
+<figure class="highlight plaintext"><figcaption><span>ping siyouluo.github.io</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">185.199.108.153</span><br><span class="line">185.199.109.153</span><br><span class="line">185.199.110.153</span><br><span class="line">185.199.111.153</span><br></pre></td></tr></table></figure>
+<p>参考 <a target="_blank" rel="noopener" href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site">Managing a custom domain for your GitHub Pages site</a></p>
+</li>
+<li><p>在 Github 仓库 <code>Settings -&gt; Pages -&gt; GitHub Pages: Custom domain</code> 填入自己的域名 (例如 <code>luosiyou.cn</code>), 并等待域名解析完成后, 勾选 <code>[√] Enforce HTTPS</code>, 等待片刻后, 该页面上方将更新网站的地址: <code>Your site is live at https://luosiyou.cn/</code>.</p>
+</li>
+<li><p>此时将发现 Github 仓库下多了一个 CNAME 文件, 事实上我们也可以在仓库中手动添加这个文件来启用自定义域名</p>
+<figure class="highlight plaintext"><figcaption><span>CNAME</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">luosiyou.cn</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="使用-Hexo-搭建网站"><a href="#使用-Hexo-搭建网站" class="headerlink" title="使用 Hexo 搭建网站"></a>使用 Hexo 搭建网站</h1><p>参考 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo 文档</a></p>
+<ol>
+<li><p>安装 Git</p>
+</li>
+<li><p>访问 <a target="_blank" rel="noopener" href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a> 下载 node.js, 双击 node-v16.18.0-x64.msi 文件安装, 默认下一步, 并勾选 <code>[√] Automatically install the necessary tools.</code>;</p>
+</li>
+<li><p>启动终端运行如下指令, 查看安装是否成功</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; node <span class="literal">-v</span></span><br><span class="line">&gt; npm <span class="literal">-v</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Users\siyou&gt; hexo <span class="literal">-v</span></span><br><span class="line">hexo<span class="literal">-cli</span>: <span class="number">4.3</span>.<span class="number">0</span></span><br><span class="line">os: win32 <span class="number">10.0</span>.<span class="number">22000</span></span><br><span class="line">node: <span class="number">16.18</span>.<span class="number">0</span></span><br><span class="line">v8: <span class="number">9.4</span>.<span class="number">146.26</span><span class="literal">-node</span>.<span class="number">22</span></span><br><span class="line">uv: <span class="number">1.43</span>.<span class="number">0</span></span><br><span class="line">zlib: <span class="number">1.2</span>.<span class="number">11</span></span><br><span class="line">brotli: <span class="number">1.0</span>.<span class="number">9</span></span><br><span class="line">ares: <span class="number">1.18</span>.<span class="number">1</span></span><br><span class="line">modules: <span class="number">93</span></span><br><span class="line">nghttp2: <span class="number">1.47</span>.<span class="number">0</span></span><br><span class="line">napi: <span class="number">8</span></span><br><span class="line">llhttp: <span class="number">6.0</span>.<span class="number">10</span></span><br><span class="line">openssl: <span class="number">1.1</span>.<span class="number">1</span>q+quic</span><br><span class="line">cldr: <span class="number">41.0</span></span><br><span class="line">icu: <span class="number">71.1</span></span><br><span class="line">tz: <span class="number">2022</span>b</span><br><span class="line">unicode: <span class="number">14.0</span></span><br><span class="line">ngtcp2: <span class="number">0.8</span>.<span class="number">1</span></span><br><span class="line">nghttp3: <span class="number">0.7</span>.<span class="number">0</span></span><br><span class="line"><span class="built_in">PS</span> C:\Users\siyou&gt; npm <span class="literal">-v</span></span><br><span class="line"><span class="number">8.19</span>.<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong><br>在 Windows Terminal 内可以使用 cmd 或 PowerShell 运行<br>而在 PowerShell 中执行时, 可能会报错 <code>无法加载文件，因为在此系统中禁止执行脚本</code>，此时以管理员身份打开 PowerShell 并修改执行策略即可</p>
+<figure class="highlight ps"><figcaption><span>Windows PowerShell</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">Set-ExecutionPolicy</span> RemoteSigned </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装 Hexo</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; npm install <span class="literal">-g</span> hexo<span class="literal">-cli</span></span><br><span class="line">&gt; npm install hexo<span class="literal">-deployer-git</span> <span class="literal">--save</span> <span class="comment"># 用于网站部署</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>建站<br>执行下列命令，Hexo 将会在指定文件夹中新建所需要的文件。</p>
+<figure class="highlight ps"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; hexo init &lt;folder&gt;</span><br><span class="line">&gt; <span class="built_in">cd</span> &lt;folder&gt;</span><br><span class="line">&gt; npm install</span><br></pre></td></tr></table></figure>
+<p>新建完成后，指定文件夹的目录如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml</span><br><span class="line">├── package.json</span><br><span class="line">├── scaffolds</span><br><span class="line">├── source</span><br><span class="line">|   ├── _drafts</span><br><span class="line">|   └── _posts</span><br><span class="line">└── themes</span><br></pre></td></tr></table></figure>
+<p>各文件及文件夹用途可以参考 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/setup">Hexo 建站</a></p>
+<p>示例</p>
+<figure class="highlight ps"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> D:\Data&gt; hexo init hexo<span class="literal">-icarus-pages</span></span><br><span class="line">INFO  Cloning hexo<span class="literal">-starter</span> https://github.com/hexojs/hexo<span class="literal">-starter</span>.git</span><br><span class="line">INFO  Install dependencies</span><br><span class="line">INFO  <span class="built_in">Start</span> blogging with Hexo!</span><br><span class="line"><span class="built_in">PS</span> D:\Data&gt; <span class="built_in">cd</span> .\hexo<span class="literal">-icarus-pages</span>\</span><br><span class="line"><span class="built_in">PS</span> D:\Data\hexo<span class="literal">-icarus-pages</span>&gt; npm install</span><br><span class="line"></span><br><span class="line">up to date, audited <span class="number">240</span> packages <span class="keyword">in</span> <span class="number">1</span>s</span><br><span class="line"></span><br><span class="line"><span class="number">22</span> packages are looking <span class="keyword">for</span> funding</span><br><span class="line">  run `npm fund` <span class="keyword">for</span> details</span><br><span class="line"></span><br><span class="line">found <span class="number">0</span> vulnerabilities</span><br></pre></td></tr></table></figure></li>
+<li><p>自定义域名 (可选)<br>如果前面配置了自己的域名, 那么在下一步部署之前, 先在 <code>source/</code> 文件夹下添加 CNAME 文件,<br>否则部署上去之后, Github 仓库内本来存在的该文件会被删去, 导致域名解析失效.</p>
+<figure class="highlight plaintext"><figcaption><span>CNAME</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">luosiyou.cn</span><br></pre></td></tr></table></figure></li>
+<li><p>修改配置文件<br>编辑 <code>_config.yml</code> 配置文件</p>
+<figure class="highlight yml"><figcaption><span>_config.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/siyouluo/siyouluo.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure></li>
+<li><p>个性化配置<br>修改 <code>_config.yml</code> 配置文件中的 title, author, url, permalink 等配置项<br>具体各配置项含义参考 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/configuration">https://hexo.io/zh-cn/docs/configuration</a></p>
+</li>
+<li><p>生成博客并部署到 Github Pages</p>
+   <figure class="highlight ps"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; hexo clean <span class="comment"># 清除上一次生成的静态网站文件, 可简写为 hexo c</span></span><br><span class="line">&gt; hexo generate <span class="comment"># 生成静态网站, 可简写为 hexo g</span></span><br><span class="line">                <span class="comment"># 参考 https://hexo.io/zh-cn/docs/generating</span></span><br><span class="line">&gt; hexo server <span class="comment"># 在本地启动 hexo 服务, 可通过 http://localhost:4000 预览网站, </span></span><br><span class="line">              <span class="comment"># 并且修改源文件后刷新浏览器会自动更新页面</span></span><br><span class="line">              <span class="comment"># 可简写为 hexo s</span></span><br><span class="line">              <span class="comment"># 参考 https://hexo.io/zh-cn/docs/server</span></span><br><span class="line">&gt; hexo deploy <span class="comment"># 将 public/ 文件夹下的静态网站部署到 Github, 可简写为 hexo d</span></span><br><span class="line">              <span class="comment"># 参考 https://hexo.io/zh-cn/docs/one-command-deployment</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建新的博客文章<br>   初始化站点时, 存在一个默认的 <code>source/_posts/hello-world.md</code> 文件可以生成第一条博客,<br>   后续如果需要创建新的博客, 使用如下命令.</p>
+   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; hexo new <span class="string">&quot;My New Post&quot;</span> <span class="comment"># 参考 https://hexo.io/zh-cn/docs/writing</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="使用-ICARUS-主题"><a href="#使用-ICARUS-主题" class="headerlink" title="使用 ICARUS 主题"></a>使用 ICARUS 主题</h1><ol>
+<li>安装 icarus 主题<figure class="highlight ps"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; npm install <span class="literal">-S</span> hexo<span class="literal">-theme-icarus</span> hexo<span class="literal">-renderer-inferno</span></span><br></pre></td></tr></table></figure></li>
+<li>使用 hexo 命令修改主题为 Icarus<figure class="highlight ps"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; hexo config theme icarus</span><br></pre></td></tr></table></figure></li>
+<li>生成站点<figure class="highlight ps"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; hexo c</span><br><span class="line">&gt; hexo g</span><br><span class="line">&gt; hexo s</span><br></pre></td></tr></table></figure></li>
+<li>个性化配置  <ol>
+<li>修改 <code>_config.icarus.yml</code> 文件, 例如更改其中某些链接, 注释掉一些不需要的组件</li>
+<li>更换图片: <code>/node_modules/hexo-theme-icarus/source/img/</code></li>
+</ol>
+</li>
+</ol>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo">Hexo Github 仓库</a></li>
+<li><a target="_blank" rel="noopener" href="https://ppoffice.github.io/hexo-theme-icarus/uncategorized/icarus%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/#install-npm">Icarus 快速上手</a></li>
+<li><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/syntax-highlight">Hexo 插入代码块</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.gaituya.com/manhua/">改图鸭 照片变漫画</a></li>
+</ul>
+</div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="罗嗣友"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">罗嗣友</p><p class="is-size-6 is-block">硕士生</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>上海</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Post</p><a href="/archives"><p class="title">1</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/siyouluo" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/siyouluo"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Gitee" href="https://gitee.com/siyouluo"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">Links</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Hexo</span></span><span class="level-right"><span class="level-item tag">hexo.io</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-10-24T08:47:21.282Z">2022-10-24</time></p><p class="title"><a href="/hello-world/">搭建博客</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">Archives</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2022/10/"><span class="level-start"><span class="level-item">October 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><!--!--></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Luo Siyou" height="28"></a><p class="is-size-7"><span>&copy; 2022 Luo Siyou</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/siyouluo/siyouluo.github.io"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
