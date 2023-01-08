@@ -1,0 +1,37 @@
+Using Onnxruntime C++ API
+Number of inputs = 1
+Input 0 : name=input_x
+Input 0 : type=1
+Input 0 : num_dims=2
+Input 0 : dim 0=-1
+Input 0 : dim 1=1
+Number of outputs = 1
+Output 0 : name=output_y
+Output 0 : type=1
+Output 0 : num_dims=2
+Output 0 : dim 0=-1
+Output 0 : dim 1=2
+output name [0]: output_y
+Input 0 : num_dims=2
+Input 0 : dim 0=6
+Input 0 : dim 1=1
+input_tensor_values:
+0.500000
+0.142857
+0.285714
+0.428571
+0.571429
+0.714286
+type of output_tensors: class std::vector<struct Ort::Value,class std::allocator<struct Ort::Value> >   , size: 1
+type of output_tensors[0]: struct Ort::Value
+size of output_tensors[0]: 2
+shape of output_tensors[0]: [6  2       ]
+output_y:
+14.999986       10.999962
+10.714272       9.571392
+12.428557       10.142819
+14.142843       10.714248
+15.857128       11.285675
+17.571415       11.857103
+
+Done!

@@ -1,0 +1,27 @@
+(env_pytorch) PS D:\demo> & D:/Anaconda3/envs/env_pytorch/python.exe d:/demo/linear_regression2d.py
+Net(
+  (fc): Linear(in_features=1, out_features=2, bias=True)
+)
+output_y: tensor([[ 0.7725, -1.0914]], grad_fn=<AddmmBackward>)
+target_y: tensor([[13.9579,  4.6526]])
+loss: 103.42431640625
+train model...
+params: [Parameter containing:
+tensor([[12.0000],
+        [ 4.0000]], requires_grad=True), Parameter containing:
+tensor([9.0000, 9.0000], requires_grad=True)]
+input_x: tensor([[-0.8546]])
+target_y:tensor([[-1.2554,  5.5815]]) = input_x*tensor([[12.,  4.]])+9 = tensor([[-1.2554,  5.5815]])
+output_y: tensor([[-1.2554,  5.5815]], grad_fn=<AddmmBackward>)
+
+model graph:graph torch-jit-export (
+  %input_x[FLOAT, batch_sizex1]
+) initializers (
+  %fc.bias[FLOAT, 2]
+  %fc.weight[FLOAT, 2x1]
+) {
+  %output_y = Gemm[alpha = 1, beta = 1, transB = 1](%input_x, %fc.weight, %fc.bias)
+  return %output_y
+}
+
+ort_output: [[-1.2554207  5.581498 ]]
