@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>ONNX - Luo Siyou</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Luo Siyou"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Luo Siyou"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="ONNX Official Webpages ONNX RUNTIME 官网主页 ONNX RUNTIME 官网文档 官方托管Github仓库: Microsoft&amp;#x2F;onnxruntime ONNX Model Zoo:预训练的onnx模型库 onnx&amp;#x2F;models#目标检测与图像分割onnx模型 (可选）将模型从 PyTorch 导出到 ONNX 并使用 ONNX Runti"><meta property="og:type" content="blog"><meta property="og:title" content="ONNX"><meta property="og:url" content="https://luosiyou.cn/blogs/onnx/"><meta property="og:site_name" content="Luo Siyou"><meta property="og:description" content="ONNX Official Webpages ONNX RUNTIME 官网主页 ONNX RUNTIME 官网文档 官方托管Github仓库: Microsoft&amp;#x2F;onnxruntime ONNX Model Zoo:预训练的onnx模型库 onnx&amp;#x2F;models#目标检测与图像分割onnx模型 (可选）将模型从 PyTorch 导出到 ONNX 并使用 ONNX Runti"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://luosiyou.cn/blogs/onnx/demo_maskrcnn.jpg"><meta property="og:image" content="https://luosiyou.cn/blogs/onnx/python_onnxruntime.jpg"><meta property="og:image" content="https://luosiyou.cn/blogs/onnx/cpp_onnxruntime.jpg"><meta property="article:published_time" content="2023-01-08T08:19:18.906Z"><meta property="article:modified_time" content="2023-01-08T09:17:59.021Z"><meta property="article:author" content="Luo Siyou"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://luosiyou.cn/blogs/onnx/demo_maskrcnn.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://luosiyou.cn/blogs/onnx/"},"headline":"ONNX","image":["https://luosiyou.cn/blogs/onnx/demo_maskrcnn.jpg","https://luosiyou.cn/blogs/onnx/python_onnxruntime.jpg","https://luosiyou.cn/blogs/onnx/cpp_onnxruntime.jpg"],"datePublished":"2023-01-08T08:19:18.906Z","dateModified":"2023-01-08T09:17:59.021Z","author":{"@type":"Person","name":"Luo Siyou"},"publisher":{"@type":"Organization","name":"Luo Siyou","logo":{"@type":"ImageObject","url":"https://luosiyou.cn/img/logo-lsy.svg"}},"description":"ONNX Official Webpages ONNX RUNTIME 官网主页 ONNX RUNTIME 官网文档 官方托管Github仓库: Microsoft&#x2F;onnxruntime ONNX Model Zoo:预训练的onnx模型库 onnx&#x2F;models#目标检测与图像分割onnx模型 (可选）将模型从 PyTorch 导出到 ONNX 并使用 ONNX Runti"}</script><link rel="canonical" href="https://luosiyou.cn/blogs/onnx/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo-lsy.svg" alt="Luo Siyou" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" target="_blank" rel="noopener" href="https://cowtransfer.com/s/5a94f1080c8c46">Netdisk</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/siyouluo/siyouluo.github.io"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2023-01-08T08:19:18.906Z" title="2023/1/8 16:19:18">2023-01-08</time>发表</span><span class="level-item"><time dateTime="2023-01-08T09:17:59.021Z" title="2023/1/8 17:17:59">2023-01-08</time>更新</span><span class="level-item">15 分钟读完 (大约2281个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">ONNX</h1><div class="content"><h1 id="ONNX-Official-Webpages"><a href="#ONNX-Official-Webpages" class="headerlink" title="ONNX Official Webpages"></a>ONNX Official Webpages</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.onnxruntime.ai/">ONNX RUNTIME 官网主页</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.onnxruntime.ai/docs/">ONNX RUNTIME 官网文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Microsoft/onnxruntime">官方托管 Github 仓库: Microsoft&#x2F;onnxruntime</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/onnx/models">ONNX Model Zoo: 预训练的 onnx 模型库</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/onnx/models#object-detection--image-segmentation-">onnx&#x2F;models# 目标检测与图像分割 onnx 模型</a></li>
+<li><a target="_blank" rel="noopener" href="https://pytorch.apachecn.org/docs/1.4/31.html">(可选）将模型从 PyTorch 导出到 ONNX 并使用 ONNX Runtime 运行</a></li>
+<li><a target="_blank" rel="noopener" href="https://pytorch.org/docs/1.7.1/onnx.html">torch.onnx - 官方文档</a><span id="more"></span></li>
+</ul>
+<h2 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/b30c8f4462ac">torchvision 官方 Mask RCNN 转 ONNX</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/XCCCCZ/article/details/110356437">onnxruntime 调用 AI 模型的 python 和 C++ 编程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://bindog.github.io/blog/2020/03/13/deep-learning-model-convert-and-depoly/">深度学习模型转换与部署那些事(含 ONNX 格式详细分析)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/tenglike1997/onnxruntime-projects">tenglike1997&#x2F;onnxruntime-projects - Github</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/LimitOut/article/details/107117759">ONNX 动态输入和动态输出问题</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_34595620/article/details/112176278">onnxruntime 的 c++ 使用(含多输入多输出问题)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/microsoft/onnxruntime/blob/master/docs/FAQ.md#how-do-i-load-and-run-models-that-have-multiple-inputs-and-outputs-using-the-cc-api">MIMO 模型的导入与运行 - Github</a></p>
+</li>
+</ul>
+<h1 id="ONNX-C-API- 说明"><a href="#ONNX-C-API- 说明" class="headerlink" title="ONNX C++ API 说明"></a>ONNX C++ API 说明</h1><ol>
+<li><p>对每个输入节点需要创建一个 <code>Ort::Value</code> 类型的变量, 该变量可以是具有动态维度的张量. 例如可以一次性输入 1 张图片, 也可以一次性输入 batch_size&#x3D;100 张图片.</p>
+</li>
+<li><p>创建 <code>Ort::Value</code> 类型的变量需要通过 <code>Ort::Value::CreateTensor</code> 函数来创建, 该函数有几种重载形式, 对于如下这种 <a target="_blank" rel="noopener" href="https://github.com/microsoft/onnxruntime/blob/4df356d1c9f1387897ccb9df1d170ba80e929756/include/onnxruntime/core/session/onnxruntime_cxx_api.h#L417">CreateTensor</a> 形式而言</p>
+</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> Ort::Value Ort::Value::<span class="built_in">CreateTensor</span>&lt;T&gt;(<span class="type">const</span> OrtMemoryInfo* info, T* p_data, <span class="type">size_t</span> p_data_element_count, <span class="type">const</span> <span class="type">int64_t</span>* shape, <span class="type">size_t</span> shape_len);</span><br></pre></td></tr></table></figure>
+<p>创建张量就需要将具体的数据组织成一维数组, 将首地址传入 <code>T* p_data</code>,<br> 数据元素总数传入 <code>size_t p_data_element_count</code>,<br> 张量形状组织成一维数组, 首地址传入 <code>const int64_t* shape</code>,<br> 张量总维数传入<code>size_t shape_len</code>.</p>
+<p>例如:<br>要将 100 张 32*64 的 RGB 图片创建为张量, 那么原始数据形状可能为 <code>[100,3,32,64]</code>, 需要将其变成一维的数组<code>std::vector&lt;float&gt; p_data(100*3*32*64)</code>, 然后将数组首地址<code>p_data</code> 传入. 那么元素总数就是 <code>p_data_element_count=100*3*32*64=614400</code>. 为了让<code>ONNX RUNTIME</code> 明确数据的原始格式, 需要创建 <code>std::vector&lt;int64_t&gt; shape = &#123;100,3,32,64&#125;</code>, 然后将<code>shape</code> 作为维度数组的首地址传入. 最后该数据原本是 <code>4</code> 维的, 因此<code>shape_len=4</code>.</p>
+<ol start="3">
+<li>如果是多输入的, 那么首先创建多个 <code>Ort::Value</code> 类型的变量, 然后创建 <code>std::vector&lt;Ort::Value&gt; ort_inputs</code>, 再通过移动构造将这些变量压入<code>vector</code> 容器中.</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ort_inputs.<span class="built_in">push_back</span>(std::<span class="built_in">move</span>(Tensor_1));</span><br><span class="line">ort_inputs.<span class="built_in">push_back</span>(std::<span class="built_in">move</span>(Tensor_2));</span><br></pre></td></tr></table></figure>
+
+<p>这样, 形式上可以将任意多个 <code>Ort::Value</code> 变量在内存中放在一起了.</p>
+<ol start="4">
+<li>在进行模型推理时, 调用 <code>session.Run()</code> 函数. 该函数有 <a target="_blank" rel="noopener" href="https://github.com/microsoft/onnxruntime/blob/4df356d1c9f1387897ccb9df1d170ba80e929756/include/onnxruntime/core/session/onnxruntime_cxx_api.h#L351"> 三种重载版本 </a>.<br> 第一种是只需要给输入变量预分配内存, 将输出变量通过函数返回值返回;<br>第二种需要给输入输出变量都预分配内存, 没有返回值;<br>第三种将输入输出进行<code>IoBinding&amp;</code>, 没有返回值.</li>
+</ol>
+<p>对于第一种版本:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::vector&lt;Value&gt; <span class="title">Run</span><span class="params">(<span class="type">const</span> RunOptions&amp; run_options, <span class="type">const</span> <span class="type">char</span>* <span class="type">const</span>* input_names, <span class="type">const</span> Value* input_values, <span class="type">size_t</span> input_count,</span></span></span><br><span class="line"><span class="params"><span class="function">                         <span class="type">const</span> <span class="type">char</span>* <span class="type">const</span>* output_names, <span class="type">size_t</span> output_count)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>input_names</code>是输入节点名的字符串数组的首地址, 例如 <code>std::vector&lt;const char*&gt; names = &#123;&quot;input_1, &quot;input_2&quot;&#125;</code>. 那么将<code>names</code> 传入即可.  <code>input_values</code>是要传入的若干个张量的首地址, 如果只传入一个张量, 那就对这个张量取地址 <code>&amp;Tensor_1</code> 传入即可; 如果要传入多个张量, 那么将这多个张量放在一个 <code>vector</code> 中, 并将该 <code>vector</code> 首地址传入即可 (二者实际是一致的).<br><code>input_count</code> 是要输入张量的个数.<br><code>output_names</code>,<code>output_count</code>同理.</p>
+<ol start="5">
+<li>在对输出变量进行解码时, 首先要按照输出节点数分为多个张量, 视该张量数据类型不同, 以不同数据类型取出其中的数据.<br>例如下面代码块中,<code>type</code>就是数据类型.<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// print output node types</span></span><br><span class="line">Ort::TypeInfo type_info = session.<span class="built_in">GetOutputTypeInfo</span>(i);</span><br><span class="line"><span class="keyword">auto</span> tensor_info = type_info.<span class="built_in">GetTensorTypeAndShapeInfo</span>();</span><br><span class="line"></span><br><span class="line">ONNXTensorElementDataType type = tensor_info.<span class="built_in">GetElementType</span>();</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Output %d : type=%d\n&quot;</span>, i, type);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>其中 <code>ONNXTensorElementDataType</code> 是一个枚举类型, 具体定义如下:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/microsoft/onnxruntime/blob/master/include/onnxruntime/core/session/onnxruntime_c_api.h#L93</span></span><br><span class="line"><span class="comment">// Copied from TensorProto::DataType</span></span><br><span class="line"><span class="comment">// Currently, Ort doesn&#x27;t support complex64, complex128</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="title class_">ONNXTensorElementDataType</span> &#123;</span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_UNDEFINED,</span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT,   <span class="comment">// maps to c type float</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT8,   <span class="comment">// maps to c type uint8_t</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_INT8,    <span class="comment">// maps to c type int8_t</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT16,  <span class="comment">// maps to c type uint16_t</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_INT16,   <span class="comment">// maps to c type int16_t</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_INT32,   <span class="comment">// maps to c type int32_t</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_INT64,   <span class="comment">// maps to c type int64_t</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_STRING,  <span class="comment">// maps to c++ type std::string</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_BOOL,</span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT16,</span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_DOUBLE,      <span class="comment">// maps to c type double</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT32,      <span class="comment">// maps to c type uint32_t</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_UINT64,      <span class="comment">// maps to c type uint64_t</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_COMPLEX64,   <span class="comment">// complex with float32 real and imaginary components</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_COMPLEX128,  <span class="comment">// complex with float64 real and imaginary components</span></span><br><span class="line">  ONNX_TENSOR_ELEMENT_DATA_TYPE_BFLOAT16     <span class="comment">// Non-IEEE floating-point format based on IEEE754 single-precision</span></span><br><span class="line">&#125; ONNXTensorElementDataType;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>对于不同的数据类型, 对应的内存块中存储的是整型变量或者浮点型变量, 应当进行不同形式的解码, 如下.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span>* boxes_ptr = output_tensors[<span class="number">0</span>].<span class="built_in">GetTensorMutableData</span>&lt;<span class="type">float</span>&gt;();</span><br><span class="line"><span class="type">int</span>* labels_ptr = output_tensors[<span class="number">1</span>].<span class="built_in">GetTensorMutableData</span>&lt;<span class="type">int</span>&gt;();</span><br></pre></td></tr></table></figure>
+
+<p>解码后得到的是一维数据, 还应当依据输出张量的维度信息进行重新组织, 得到合理的输出.</p>
+<p>我写的一个简单示例如 <a href="./pytorch_onnx.md">pytorch_onnx 线性回归模型</a> 所示.</p>
+<h1 id="例程"><a href="# 例程" class="headerlink" title="例程"></a>例程 </h1><p> 当前有一个任务是要将 <code>python+pytorch</code> 编写的 <code>maskrcnn</code> 模型部署到 <code>C++</code> 环境中, 主要路线是用 <code>pytorch</code> 内置的 <code>torch.onnx</code> 将模型输出为 <code>*.onnx</code> 文件, 然后再用 <code>onnxruntime_cxx_api</code> 导入模型进行推理.</p>
+<p>示例图片如下: <code>demo.jpg</code></p>
+<div align=center>
+    <img src="demo_maskrcnn.jpg" width=300>
+</div>
+
+<ol>
+<li>调用 <code>pytorch</code> 内置模型 <code>maskrcnn_resnet50_fpn</code>(包括预训练参数). 使用<code>torch.jit.script</code> 直接输出序列化模型文件 <code>model.pt</code>.<br> 如果用 <code>C++</code> 版本的 <code>libtorch+torchvision</code> 也许是可以直接导入该模型文件并进行推理的, 但是 <code>torchvision</code> 的编译过程踩坑不断, 已弃疗!</li>
+</ol>
+<ul>
+<li><a href="./python_pytorch_onnx.md#%E8%BE%93%E5%87%BApt%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6">创建并输出 pt 模型文件</a></li>
+</ul>
+<ol start="2">
+<li>调用 <code>torch.onnx</code> 输出序列化模型文件 <code>model.onnx</code>, 输出时需要提供一个示例样本, 理论上可以用随机数<code>torch.randn</code>, 这不影响模型导出以及后续的加载. 只是随机生成的样本可能经过模型推理后输出为空, 在<code>python</code> 环境中也许还比较容易发现异样, 但在用 <code>C++</code> 编程加载模型并进行推理的时候如果也用随机样本, 并且输出为空, 会让人怀疑人生的!</li>
+</ol>
+<p>requirements: </p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; conda install <span class="literal">-c</span> conda<span class="literal">-forge</span> onnx </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><a href="./python_pytorch_onnx.md#%E8%BE%93%E5%87%BAONNX%E6%A8%A1%E5%9E%8B%E6%96%87%E4%BB%B6">创建并输出 ONNX 模型文件</a></li>
+</ul>
+<ol start="3">
+<li>仍旧是用 <code>python</code> 加载模型文件 <code>model.onnx</code>, 并用<code>onnxruntime</code> 进行模型推理. 原始模型推理得到的输出是 <code>batch_size</code> 个字典组成的列表. 每个字典是对应某张图片的四个输出: <code>&quot;boxes&quot;,&quot;labels&quot;,&quot;scores&quot;,&quot;masks&quot;</code>. 而 <code>onnxruntime</code> 推理得到的输出似乎直接就全都是列表(待证!).</li>
+</ol>
+<p>Requirements: </p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; pip install onnxruntime</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><a href="./python_pytorch_onnx.md#Python%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9E%8B%E5%89%8D%E5%90%91%E6%8E%A8%E7%90%86">Python 导入模型前向推理</a></li>
+</ul>
+<ol start="4">
+<li>以上是在 <code>python</code> 中进行模型导出与加载, 接下来要换用 <code>C++</code> 接口实现.</li>
+</ol>
+<p>环境: <code>Visual Studio 2017</code>, <code>Windows 10 x64</code>.</p>
+<p><code>新建 VS 工程 </code>-&gt;<code> 项目 </code>-&gt;<code> 管理 NuGet 程序包 (N)</code>-&gt;<code> 浏览 </code>-&gt;<code> 输入 onnx</code>: 选择 <code>Microsoft.ML.OnnxRuntime</code>+<code>Microsoft.ML.OnnxRuntime.MKLML</code> 进行安装 (每新建一个工程就要安装一次). 如果要用<code>GPU</code> 加速, 则应该下载 GPU 版本, 并且似乎 <code>CPU</code> 与<code>GPU</code>版本不可共存. 并且 <code>Python</code> 环境中也要对应, 使用一个就要卸载另一个.(这个后续再去仔细研究, 暂且仅用 <code>CPU</code> 版本)</p>
+<p>参考:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/guanguanboy/article/details/105251505">如何在 VS 项目中添加 onnx runtime 包</a></li>
+</ul>
+<ol start="5">
+<li>读取图片</li>
+</ol>
+<p>Note: 我首先将 <a href="demo_maskrcnn.jpg">demo_maskrcnn.jpg</a> <code>resize</code> 成了 <code>500*667</code> 大小的图片<code>demo_resize.jpg</code>, 且此后所有操作都是针对处理后的图片进行的.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">img = Image.<span class="built_in">open</span>(<span class="string">&#x27;demo.jpg&#x27;</span>)</span><br><span class="line">img = img.resize((<span class="number">500</span>,<span class="number">667</span>))</span><br><span class="line">img.save(<span class="string">&#x27;demo_resize.jpg&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><a href="./cpp_onnxruntime.md#%E5%9B%BE%E7%89%87%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%A4%84%E7%90%86">图片读取与处理</a></li>
+</ul>
+<ol start="6">
+<li><code>ONNX C++ API</code>调用模型进行前向推理</li>
+</ol>
+<ul>
+<li><a href="./cpp_onnxruntime.md#CPP%E6%A8%A1%E5%9E%8B%E5%89%8D%E5%90%91%E6%8E%A8%E7%90%86">C++ 模型前向推理</a></li>
+</ul>
+<p>用 <code>python</code>(左) 和<code>cpp</code>(右)推理得到的模型输出结果依次如下图所示, 虽然有所区别, 但如果将置信度设置在 <code>90%</code> 以上, 则二者都检测出了图片中人物的全身. 此外, 这里试验用的模型是 pytorch<code>预训练模型</code>, 并没有针对此类图片进行专门训练. 测试出现偏差也情有可原.</p>
+<div align=center>
+    <img src="python_onnxruntime.jpg" width=300>
+    <img src="cpp_onnxruntime.jpg" width=300>
+</div>
+
+<h1 id="程序源码"><a href="# 程序源码" class="headerlink" title="程序源码"></a>程序源码</h1><ul>
+<li><a href="./python_pytorch_onnx.md">python code</a></li>
+<li><a href="./cpp_onnxruntime.md">cpp code</a></li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>ONNX</p><p><a href="https://luosiyou.cn/blogs/onnx/">https://luosiyou.cn/blogs/onnx/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>Luo Siyou</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2023-01-08</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2023-01-08</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/blogs/pcl/"><span class="level-item">Point Cloud Library</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="罗嗣友"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">罗嗣友</p><p class="is-size-6 is-block">硕士生</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>上海</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">20</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">2</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">20</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/siyouluo" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/siyouluo"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Email" href="mailto:siyouluo@qq.com"><i class="fa fa-envelope"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Gitee" href="https://gitee.com/siyouluo">Gitee</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#ONNX-Official-Webpages"><span class="level-left"><span class="level-item">1</span><span class="level-item">ONNX Official Webpages</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Others"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">Others</span></span></a></li></ul></li><li><a class="level is-mobile" href="#ONNX-C-API- 说明"><span class="level-left"><span class="level-item">2</span><span class="level-item">ONNX C++ API 说明</span></span></a></li><li><a class="level is-mobile" href="#例程"><span class="level-left"><span class="level-item">3</span><span class="level-item">例程 </span></span></a></li><li><a class="level is-mobile" href="#程序源码"><span class="level-left"><span class="level-item">4</span><span class="level-item">程序源码</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://docs.opencv.org/3.4.11/d9/df8/tutorial_root.html" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">OpenCV Tutorials</span></span><span class="level-right"><span class="level-item tag">docs.opencv.org</span></span></a></li><li><a class="level is-mobile" href="https://pointclouds.org/documentation/" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">PCL API Documentation</span></span><span class="level-right"><span class="level-item tag">pointclouds.org</span></span></a></li><li><a class="level is-mobile" href="https://zh.cppreference.com" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">C++ 中文参考手册</span></span><span class="level-right"><span class="level-item tag">zh.cppreference.com</span></span></a></li><li><a class="level is-mobile" href="/blogs/mark" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">我的书签</span></span><span class="level-right"><span class="level-item tag">/blogs/mark</span></span></a></li></ul></div></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/notes/"><span class="level-start"><span class="level-item">notes</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/tips/"><span class="level-start"><span class="level-item">tips</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-01-08T08:19:18.906Z">2023-01-08</time></p><p class="title"><a href="/blogs/onnx/">ONNX</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-01-03T08:51:20.967Z">2023-01-03</time></p><p class="title"><a href="/blogs/pcl/">Point Cloud Library</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-01-03T07:33:03.212Z">2023-01-03</time></p><p class="title"><a href="/blogs/opencv/">OpenCV</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-01-03T07:20:20.574Z">2023-01-03</time></p><p class="title"><a href="/blogs/vs_export_dll_lib/">VS2017 输出 dll、lib 文件</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-01-03T07:12:27.088Z">2023-01-03</time></p><p class="title"><a href="/blogs/vs_qt_pcl/">在 Qt 界面上显示点云</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2023/01/"><span class="level-start"><span class="level-item">一月 2023</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/12/"><span class="level-start"><span class="level-item">十二月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/11/"><span class="level-start"><span class="level-item">十一月 2022</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/10/"><span class="level-start"><span class="level-item">十月 2022</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/WinSCP/"><span class="tag">WinSCP</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/algorithm/"><span class="tag">algorithm</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/build/"><span class="tag">build</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/cmake/"><span class="tag">cmake</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/cpp/"><span class="tag">cpp</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/dll/"><span class="tag">dll</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/hexo/"><span class="tag">hexo</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/icarus/"><span class="tag">icarus</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/lib/"><span class="tag">lib</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/license/"><span class="tag">license</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/msvc/"><span class="tag">msvc</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/opencv/"><span class="tag">opencv</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/pcl/"><span class="tag">pcl</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/qt/"><span class="tag">qt</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/resume/"><span class="tag">resume</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/tools/"><span class="tag">tools</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/vs/"><span class="tag">vs</span><span class="tag">3</span></a></div><div class="control"><a class="tags has-addons" href="/tags/vtk/"><span class="tag">vtk</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/windows/"><span class="tag">windows</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93/"><span class="tag">文件传输</span><span class="tag">1</span></a></div></div></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo-lsy.svg" alt="Luo Siyou" height="28"></a><p class="is-size-7"><span>&copy; 2023 Luo Siyou</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/siyouluo/siyouluo.github.io"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

@@ -1,0 +1,366 @@
+<h1 id="ONNX-线性回归"><a href="#ONNX-线性回归" class="headerlink" title="ONNX 线性回归"></a>ONNX 线性回归</h1><div align=center>
+    <img src="https://luosiyou.cn/blogs/onnx/model.svg" height=200>
+</div>
+
+<p>上图所示是一个简单的线性回归模型,用<code>python+pytorch</code>创建并训练,真实的回归模型为<code>y1 = 12*x+9, y2 = 4*x+9</code>. 通过大量的随机数进行训练使其能够稳定预测输出值. 然后通过<code>torch.onnx</code>将模型输出为<code>model.onnx</code>文件,并再次通过<code>python+onnxruntime</code>读取该模型以验证模型文件是没有问题的.</p>
+<p>然后通过<code>CPP+onnxruntime_cxx_api</code>读取该模型文件,并输入<code>batch_size=6</code>个数据,从得到的<code>[batch_size=6,2]</code>个数据来看,可以较为准确地预测输出值.</p>
+<pre><code>标量输入:x, 向量输出 y = [y1,y2]
+y1 = k1*x+b1
+y2 = k2*x+b2
+</code></pre>
+<pre><code class="python"># python creat &amp; train model
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+def setup_seed(seed):
+     torch.manual_seed(seed)
+     torch.cuda.manual_seed_all(seed)
+    #  np.random.seed(seed)
+    #  random.seed(seed)
+     torch.backends.cudnn.deterministic = True
+# 设置随机数种子
+setup_seed(20)
+
+class Net(nn.Module):
+
+    def __init__(self):
+        super(Net, self).__init__()
+        # an affine operation: y = Wx + b, 1元线性回归
+        self.fc = nn.Linear(1,2)
+
+    def forward(self, x):
+        x = self.fc(x)
+        return x
+
+
+model = Net()
+print(model)
+
+input_x = torch.randn(1,1)
+output_y = model(input_x)
+print(f&quot;output_y: {output_y}&quot;)
+W = torch.Tensor([[12,4]])
+b = 9
+target_y = torch.matmul(input_x,W)
+# target_y = input_x*w+9  # y = kx+b
+# target_y = target_y.view(1,-1)  # 使目标值与数据值尺寸一致
+print(f&quot;target_y: {target_y}&quot;)
+criterion = nn.MSELoss()
+
+loss = criterion(output_y, target_y)
+print(f&quot;loss: {loss}&quot;)
+
+import torch.optim as optim
+
+# 创建优化器(optimizer）
+optimizer = optim.SGD(model.parameters(), lr=0.01)
+
+for i in range(2000):
+    # 在训练的迭代中：
+    optimizer.zero_grad()   # 清零梯度缓存
+    input_x = torch.randn(1,1)
+    target_y = torch.matmul(input_x,W)+b
+    # target_y = target_y.view(1,-1)
+    output_y = model(input_x)
+    loss = criterion(output_y, target_y)
+    loss.backward()
+    optimizer.step()    # 更新参数
+print(&quot;train model...&quot;)
+print(f&quot;params: {list(model.parameters())}&quot;)
+print(f&quot;input_x: {input_x}&quot;)
+print(f&quot;target_y:{target_y} = input_x*{W}+{b} = {torch.matmul(input_x,W)+b}&quot;)
+print(f&quot;output_y: {output_y}&quot;)
+
+device = torch.device(&#39;cpu&#39;)
+
+
+torch.onnx.export(
+    model.to(device),
+    input_x,
+    &#39;model.onnx&#39;,
+    opset_version=11,
+    input_names=[&quot;input_x&quot;],		# 输入名
+    output_names=[&quot;output_y&quot;],	# 输出名
+    dynamic_axes={  &quot;input_x&quot;:{0:&quot;batch_size&quot;},	# 批处理变量
+                    &quot;output_y&quot;:{0:&quot;batch_size&quot;}
+                    },
+    verbose=False  # set True to print model graph
+    )
+
+import onnx
+onnx_model = onnx.load(&quot;model.onnx&quot;)
+onnx.checker.check_model(onnx_model)
+print(f&quot;\nmodel graph:{onnx.helper.printable_graph(onnx_model.graph)}\n&quot;)
+
+import onnxruntime
+def to_numpy(tensor):
+    return tensor.detach().cpu().numpy() if tensor.requires_grad else tensor.cpu().numpy()
+
+ort_session = onnxruntime.InferenceSession(&quot;model.onnx&quot;)
+ort_inputs = {ort_session.get_inputs()[0].name: to_numpy(input_x)}
+# print(ort_inputs)
+ort_output = ort_session.run(None,input_feed=ort_inputs)
+
+print(f&quot;ort_output: {ort_output[0]}&quot;)
+
+</code></pre>
+<p>命令行输出为:</p>
+<pre><code class="powershell">(env_pytorch) PS D:\demo&gt; &amp; D:/Anaconda3/envs/env_pytorch/python.exe d:/demo/linear_regression2d.py
+Net(
+  (fc): Linear(in_features=1, out_features=2, bias=True)
+)
+output_y: tensor([[ 0.7725, -1.0914]], grad_fn=&lt;AddmmBackward&gt;)
+target_y: tensor([[13.9579,  4.6526]])
+loss: 103.42431640625
+train model...
+params: [Parameter containing:
+tensor([[12.0000],
+        [ 4.0000]], requires_grad=True), Parameter containing:
+tensor([9.0000, 9.0000], requires_grad=True)]
+input_x: tensor([[-0.8546]])
+target_y:tensor([[-1.2554,  5.5815]]) = input_x*tensor([[12.,  4.]])+9 = tensor([[-1.2554,  5.5815]])
+output_y: tensor([[-1.2554,  5.5815]], grad_fn=&lt;AddmmBackward&gt;)
+
+model graph:graph torch-jit-export (
+  %input_x[FLOAT, batch_sizex1]
+) initializers (
+  %fc.bias[FLOAT, 2]
+  %fc.weight[FLOAT, 2x1]
+) {
+  %output_y = Gemm[alpha = 1, beta = 1, transB = 1](%input_x, %fc.weight, %fc.bias)
+  return %output_y
+}
+
+ort_output: [[-1.2554207  5.581498 ]]
+(env_pytorch) PS D:\demo&gt;
+</code></pre>
+<pre><code class="cpp">//main.cpp
+#include &lt;assert.h&gt;
+#include &lt;vector&gt;
+#include &lt;onnxruntime_cxx_api.h&gt;
+#include &lt;typeinfo&gt;
+int main(int argc, char* argv[]) {
+//*************************************************************************
+  // initialize  enviroment...one enviroment per process
+  // enviroment maintains thread pools and other state info
+    Ort::Env env(ORT_LOGGING_LEVEL_WARNING, &quot;test&quot;);
+
+    // initialize session options if needed
+    Ort::SessionOptions session_options;
+    session_options.SetIntraOpNumThreads(1);
+
+    // If onnxruntime.dll is built with CUDA enabled, we can uncomment out this line to use CUDA for this
+    // session (we also need to include cuda_provider_factory.h above which defines it)
+    // #include &quot;cuda_provider_factory.h&quot;
+    // OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 1);
+
+    // Sets graph optimization level
+    // Available levels are
+    // ORT_DISABLE_ALL -&gt; To disable all optimizations
+    // ORT_ENABLE_BASIC -&gt; To enable basic optimizations (Such as redundant node removals)
+    // ORT_ENABLE_EXTENDED -&gt; To enable extended optimizations (Includes level 1 + more complex optimizations like node fusions)
+    // ORT_ENABLE_ALL -&gt; To Enable All possible opitmizations
+    session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
+
+    //*************************************************************************
+    // create session and load model into memory
+    // using squeezenet version 1.3
+    // URL = https://github.com/onnx/models/tree/master/squeezenet
+#ifdef _WIN32
+    const wchar_t* model_path = L&quot;model.onnx&quot;;
+#else
+    const char* model_path = &quot;model.onnx&quot;;
+#endif
+
+    printf(&quot;Using Onnxruntime C++ API\n&quot;);
+    Ort::Session session(env, model_path, session_options);
+
+    //*************************************************************************
+        // print model input layer (node names, types, shape etc.)
+    Ort::AllocatorWithDefaultOptions allocator;
+
+    // print number of model input nodes
+    size_t num_input_nodes = session.GetInputCount();
+    std::vector&lt;const char*&gt; input_node_names(num_input_nodes);
+    std::vector&lt;int64_t&gt; input_node_dims;  // simplify... this model has only 1 input node {1, 3, 224, 224}.
+                                           // Otherwise need vector&lt;vector&lt;&gt;&gt;
+
+    printf(&quot;Number of inputs = %zu\n&quot;, num_input_nodes);
+
+    // iterate over all input nodes
+    for (int i = 0; i &lt; num_input_nodes; i++) {
+        // print input node names
+        char* input_name = session.GetInputName(i, allocator);
+        printf(&quot;Input %d : name=%s\n&quot;, i, input_name);
+        input_node_names[i] = input_name;
+
+        // print input node types
+        Ort::TypeInfo type_info = session.GetInputTypeInfo(i);
+        auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
+
+        ONNXTensorElementDataType type = tensor_info.GetElementType();
+        printf(&quot;Input %d : type=%d\n&quot;, i, type);
+
+        // print input shapes/dims
+        input_node_dims = tensor_info.GetShape();
+
+        //printf(&quot;tensor_info.GetElementCount(): %zu\n&quot;, tensor_info.GetElementCount());
+
+
+        printf(&quot;Input %d : num_dims=%zu\n&quot;, i, input_node_dims.size());
+        for (int j = 0; j &lt; input_node_dims.size(); j++)
+            printf(&quot;Input %d : dim %d=%jd\n&quot;, i, j, input_node_dims[j]);
+    }
+        //Number of inputs = 1
+        //Input 0 : name = input_x
+        //Input 0 : type = 1
+        //Input 0 : num_dims = 1
+        //Input 0 : dim 0 = -1
+
+//*************************************************************************
+  // Similar operations to get output node information.
+  // Use OrtSessionGetOutputCount(), OrtSessionGetOutputName()
+  // OrtSessionGetOutputTypeInfo() as shown above.
+        // print number of model input nodes
+    size_t num_output_nodes = session.GetOutputCount();
+    std::vector&lt;const char*&gt; output_node_names(num_output_nodes);
+    std::vector&lt;int64_t&gt; output_node_dims;  // simplify... this model has only 1 input node {1, 3, 224, 224}.
+                                           // Otherwise need vector&lt;vector&lt;&gt;&gt;
+
+    printf(&quot;Number of outputs = %zu\n&quot;, num_output_nodes);
+
+    // iterate over all input nodes
+    for (int i = 0; i &lt; num_output_nodes; i++) {
+        // print output node names
+        char* output_name = session.GetOutputName(i, allocator);
+        printf(&quot;Output %d : name=%s\n&quot;, i, output_name);
+        output_node_names[i] = output_name;
+
+        // print output node types
+        Ort::TypeInfo type_info = session.GetOutputTypeInfo(i);
+        auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
+
+        ONNXTensorElementDataType type = tensor_info.GetElementType();
+        printf(&quot;Output %d : type=%d\n&quot;, i, type);
+
+        // print output shapes/dims
+        output_node_dims = tensor_info.GetShape();
+        printf(&quot;Output %d : num_dims=%zu\n&quot;, i, output_node_dims.size());
+        for (int j = 0; j &lt; output_node_dims.size(); j++)
+            printf(&quot;Output %d : dim %d=%jd\n&quot;, i, j, output_node_dims[j]);
+    }
+
+    //*************************************************************************
+  // Score the model using sample data, and inspect values
+
+    size_t input_tensor_size = 1;  // simplify ... using known dim values to calculate size
+                                               // use OrtGetTensorShapeElementCount() to get official size!
+
+    std::vector&lt;float&gt; input_tensor_values;
+    //std::vector&lt;const char*&gt; output_node_names = { &quot;boxes&quot;,&quot;labels&quot;,&quot;scores&quot;,&quot;3782&quot; };
+    for (int i = 0; i &lt; num_output_nodes; i++)
+    {
+        printf(&quot;output name [%zu]: %s\t&quot;, i,output_node_names[i]);
+    }
+    printf(&quot;\n&quot;);
+
+    input_node_dims[0] = 6;//-1
+    printf(&quot;Input %d : num_dims=%zu\n&quot;, 0, input_node_dims.size());
+    for (int j = 0; j &lt; input_node_dims.size(); j++)
+        printf(&quot;Input %d : dim %d=%jd\n&quot;, 0, j, input_node_dims[j]);
+
+    // initialize input data with values in [0.0, 1.0]
+    // 1 tensor, with shape = input_node_dims =[6,1]
+    input_tensor_size *= input_node_dims[0] * input_node_dims[1];
+    for (unsigned int i = 0; i &lt; input_tensor_size; i++)
+    {
+        input_tensor_values.push_back((float)i / (input_tensor_size + 1));
+    }
+    input_tensor_values[0] = 0.5;
+    printf(&quot;input_tensor_values:\n&quot;);
+    for (unsigned int i = 0; i &lt; input_tensor_size; i++)
+        printf(&quot;%f\n&quot;, input_tensor_values[i]);
+
+    // create input tensor object from data values
+    auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+    //Ort::Value input_tensor = Ort::Value::CreateTensor&lt;float&gt;(memory_info, input_tensor_values.data(), input_tensor_size, input_node_dims.data(), 4);
+    Ort::Value input_tensor = Ort::Value::CreateTensor&lt;float&gt;(memory_info, input_tensor_values.data(), input_tensor_size, input_node_dims.data(), input_node_dims.size());
+    assert(input_tensor.IsTensor());
+
+    // score model &amp; input tensor, get back output tensor
+    auto output_tensors = session.Run(Ort::RunOptions{ nullptr }, input_node_names.data(), &amp;input_tensor, 1, output_node_names.data(), 1);
+    assert(output_tensors.size() == 1 &amp;&amp; output_tensors.front().IsTensor());
+
+    printf(&quot;type of output_tensors: %s\t, size: %zu\n&quot;,
+        typeid(output_tensors).name(), output_tensors.size());
+    for (int i = 0; i &lt; output_tensors.size(); i++)
+    {
+        printf(&quot;type of output_tensors[%d]: %s\n&quot;, i, typeid(output_tensors[i]).name());
+        std::vector&lt;int64_t&gt; output_node_i_shape = output_tensors[i].GetTensorTypeAndShapeInfo().GetShape();
+        printf(&quot;size of output_tensors[%zu]: %zu\n&quot;,i, output_node_i_shape.size());
+        printf(&quot;shape of output_tensors[%zu]: [&quot;, i);
+        for (int j = 0; j &lt; output_node_i_shape.size(); j++)
+        {
+            printf(&quot;%zu\t&quot;, output_node_i_shape[j]);
+        }
+        printf(&quot;]\n&quot;);
+
+        float* output_y = output_tensors[i].GetTensorMutableData&lt;float&gt;();
+        printf(&quot;output_y:\n&quot;);
+        for (int j = 0; j &lt; output_node_i_shape[0]; j++)
+        {
+            for(int k=0;k&lt;output_node_i_shape[1];k++){
+                printf(&quot;%f\t&quot;, output_y[j*output_node_i_shape[1]+k]);
+            }
+            printf(&quot;\n&quot;);
+        }
+
+    }
+
+    printf(&quot;\nDone!\n&quot;);
+    return 0;
+}
+</code></pre>
+<pre><code class="cmd">Using Onnxruntime C++ API
+Number of inputs = 1
+Input 0 : name=input_x
+Input 0 : type=1
+Input 0 : num_dims=2
+Input 0 : dim 0=-1
+Input 0 : dim 1=1
+Number of outputs = 1
+Output 0 : name=output_y
+Output 0 : type=1
+Output 0 : num_dims=2
+Output 0 : dim 0=-1
+Output 0 : dim 1=2
+output name [0]: output_y
+Input 0 : num_dims=2
+Input 0 : dim 0=6
+Input 0 : dim 1=1
+input_tensor_values:
+0.500000
+0.142857
+0.285714
+0.428571
+0.571429
+0.714286
+type of output_tensors: class std::vector&lt;struct Ort::Value,class std::allocator&lt;struct Ort::Value&gt; &gt;   , size: 1
+type of output_tensors[0]: struct Ort::Value
+size of output_tensors[0]: 2
+shape of output_tensors[0]: [6  2       ]
+output_y:
+14.999986       10.999962
+10.714272       9.571392
+12.428557       10.142819
+14.142843       10.714248
+15.857128       11.285675
+17.571415       11.857103
+
+Done!
+
+D:\demo\VS_ONNX\demo_proj\x64\Debug\demo_proj.exe (进程 17392)已退出，返回代码为: 0。
+若要在调试停止时自动关闭控制台，请启用“工具”-&gt;“选项”-&gt;“调试”-&gt;“调试停止时自动关闭控制台”。
+按任意键关闭此窗口..
+</code></pre>
